@@ -51,6 +51,104 @@ func TestGenerate(t *testing.T) {
 			library: &config.Library{
 				Name: "parallelstore",
 				APIs: []*config.API{{Path: "google/cloud/parallelstore/v1"}},
+				Gcloud: &config.GcloudSurface{
+					SupportsStarUpdateMasks: false,
+					RootIsHidden:            true,
+					HelpText: &config.GcloudHelpTextRules{
+						ServiceRules: []*config.GcloudHelpTextRule{
+							{
+								Selector: "google.cloud.parallelstore.v1.Parallelstore",
+								HelpText: &config.GcloudHelpTextElement{
+									Brief:       "Manage Parallelstore resources",
+									Description: "Manage Parallelstore resources",
+								},
+							},
+						},
+						MessageRules: []*config.GcloudHelpTextRule{
+							{
+								Selector: "google.cloud.parallelstore.v1.Instance",
+								HelpText: &config.GcloudHelpTextElement{
+									Brief:       "Manage Parallelstore instance resources",
+									Description: "Manage Parallelstore instance resources.",
+								},
+							},
+						},
+						MethodRules: []*config.GcloudHelpTextRule{
+							{
+								Selector: "google.cloud.parallelstore.v1.Parallelstore.ListInstances",
+								HelpText: &config.GcloudHelpTextElement{
+									Brief:       "List Parallelstore instances",
+									Description: "List Parallelstore instances.",
+									Examples:    []string{"To list all instances in particular location `us-central1-a` run:\n\n$ {command} --location=us-central1-a"},
+								},
+							},
+							{
+								Selector: "google.cloud.parallelstore.v1.Parallelstore.GetInstance",
+								HelpText: &config.GcloudHelpTextElement{
+									Brief:       "Gets details of a single Parallelstore instance",
+									Description: "Gets details of a single Parallelstore instance.",
+									Examples:    []string{"To get the details of a single instance `my-instance` in location `us-central1-a` run:\n\n$ {command} my-instance --location=us-central1-a"},
+								},
+							},
+							{
+								Selector: "google.cloud.parallelstore.v1.Parallelstore.CreateInstance",
+								HelpText: &config.GcloudHelpTextElement{
+									Brief:       "Creates a Parallelstore instance",
+									Description: "Creates a Parallelstore instance.",
+									Examples:    []string{"To create an instance `my-instance` in location `us-central1-a` with 12000 Gib capacity run:\n\n$ {command} my-instance --capacity-gib=12000 --location=us-central1-a"},
+								},
+							},
+							{
+								Selector: "google.cloud.parallelstore.v1.Parallelstore.UpdateInstance",
+								HelpText: &config.GcloudHelpTextElement{
+									Brief:       "Updates the parameters of a single Parallelstore instance",
+									Description: "Updates the parameters of a single Parallelstore instance.",
+									Examples:    []string{"To update the description of an instance `my-instance` in location `us-central1-a` run:\n\n$ {command} my-instance --location=us-central1-a --description=\"<updated description>\""},
+								},
+							},
+							{
+								Selector: "google.cloud.parallelstore.v1.Parallelstore.DeleteInstance",
+								HelpText: &config.GcloudHelpTextElement{
+									Brief:       "Deletes a single Parallelstore instance",
+									Description: "Deletes a single Parallelstore instance.",
+									Examples:    []string{"To delete an instance `my-instance` run:\n\n$ {command} my-instance"},
+								},
+							},
+							{
+								Selector: "google.cloud.parallelstore.v1.Parallelstore.ImportData",
+								HelpText: &config.GcloudHelpTextElement{
+									Brief:       "Imports data from Cloud Storage to Parallelstore instance.",
+									Description: "Imports data from Cloud Storage to Parallelstore instance.",
+									Examples:    []string{"To import data from `gs://my-bucket` storage to `my-instance` run:\n\n$ {command} my-instance --location=us-central-a --source-gcs-bucket-uri=gs://my_bucket --destination-parallelstore-path='/'"},
+								},
+							},
+							{
+								Selector: "google.cloud.parallelstore.v1.Parallelstore.ExportData",
+								HelpText: &config.GcloudHelpTextElement{
+									Brief:       "Exports data from Parallelstore instance to Cloud Storage.",
+									Description: "Exports data from Parallelstore instance to Cloud Storage.",
+									Examples:    []string{"To export data from `my-instance` to `gs://my-bucket` storage  run:\n\n$ {command} my-instance --location=us-central-a --destination-gcs-bucket-uri=gs://my-bucket --source-parallelstore-path='/'"},
+								},
+							},
+						},
+					},
+					OutputFormatting: []*config.GcloudOutputFormatting{
+						{
+							Selector: "google.cloud.parallelstore.v1.Parallelstore.ListInstances",
+							Format:   "table(name,\n      capacityGib:label=Capacity,\n      description,\n      createTime,\n      updateTime,\n      state,\n      network,\n      reserved_ip_range,\n      accessPoints.join(\",\"))",
+						},
+					},
+					CommandOperationsConfig: []*config.GcloudCommandOperationsConfig{
+						{
+							Selector:               "google.cloud.parallelstore.v1.Parallelstore.ImportData",
+							DisplayOperationResult: true,
+						},
+						{
+							Selector:               "google.cloud.parallelstore.v1.Parallelstore.ExportData",
+							DisplayOperationResult: true,
+						},
+					},
+				},
 			},
 			golden: "testdata/parallelstore",
 		},

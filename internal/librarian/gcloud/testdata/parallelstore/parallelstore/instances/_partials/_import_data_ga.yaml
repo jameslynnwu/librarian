@@ -19,8 +19,12 @@
   auto_generated: true
   hidden: true
   help_text:
-    brief: ""
-    description: ""
+    brief: Imports data from Cloud Storage to Parallelstore instance.
+    description: Imports data from Cloud Storage to Parallelstore instance.
+    examples: |-
+      To import data from `gs://my-bucket` storage to `my-instance` run:
+
+      $ {command} my-instance --location=us-central-a --source-gcs-bucket-uri=gs://my_bucket --destination-parallelstore-path='/'
   arguments:
     params:
       - help_text: Name of the resource.

@@ -19,12 +19,12 @@
   auto_generated: true
   hidden: true
   help_text:
-    brief: Describe instances
-    description: Describe a instance
+    brief: Gets details of a single Parallelstore instance
+    description: Gets details of a single Parallelstore instance.
     examples: |-
-      To describe the instance, run:
+      To get the details of a single instance `my-instance` in location `us-central1-a` run:
 
-          $ {command}
+      $ {command} my-instance --location=us-central1-a
   arguments:
     params:
       - help_text: |-

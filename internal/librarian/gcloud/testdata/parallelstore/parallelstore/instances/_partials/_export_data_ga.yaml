@@ -19,8 +19,12 @@
   auto_generated: true
   hidden: true
   help_text:
-    brief: ""
-    description: ""
+    brief: Exports data from Parallelstore instance to Cloud Storage.
+    description: Exports data from Parallelstore instance to Cloud Storage.
+    examples: |-
+      To export data from `my-instance` to `gs://my-bucket` storage  run:
+
+      $ {command} my-instance --location=us-central-a --destination-gcs-bucket-uri=gs://my-bucket --source-parallelstore-path='/'
   arguments:
     params:
       - help_text: Name of the resource.

@@ -19,12 +19,12 @@
   auto_generated: true
   hidden: true
   help_text:
-    brief: Update instances
-    description: Update a instance
+    brief: Updates the parameters of a single Parallelstore instance
+    description: Updates the parameters of a single Parallelstore instance.
     examples: |-
-      To update the instance, run:
+      To update the description of an instance `my-instance` in location `us-central1-a` run:
 
-          $ {command}
+      $ {command} my-instance --location=us-central1-a --description="<updated description>"
   arguments:
     params:
       - help_text: |-

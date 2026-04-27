@@ -19,12 +19,12 @@
   auto_generated: true
   hidden: true
   help_text:
-    brief: List instances
-    description: List instances
+    brief: List Parallelstore instances
+    description: List Parallelstore instances.
     examples: |-
-      To list all instances, run:
+      To list all instances in particular location `us-central1-a` run:
 
-          $ {command}
+      $ {command} --location=us-central1-a
   arguments:
     params:
       - help_text: |-

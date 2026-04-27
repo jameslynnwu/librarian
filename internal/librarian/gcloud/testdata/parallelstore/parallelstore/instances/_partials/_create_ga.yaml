@@ -19,12 +19,12 @@
   auto_generated: true
   hidden: true
   help_text:
-    brief: Create instances
-    description: Create a instance
+    brief: Creates a Parallelstore instance
+    description: Creates a Parallelstore instance.
     examples: |-
-      To create the instance, run:
+      To create an instance `my-instance` in location `us-central1-a` with 12000 Gib capacity run:
 
-          $ {command}
+      $ {command} my-instance --capacity-gib=12000 --location=us-central1-a
   arguments:
     params:
       - help_text: |-
