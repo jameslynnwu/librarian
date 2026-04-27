@@ -548,3 +548,40 @@ libraries:
 		t.Errorf("unexpected format: %s", rule.Format)
 	}
 }
+
+func TestGcloudConfig_CommandOperationsConfig(t *testing.T) {
+	yamlData := `
+language: gcloud
+version: 1.0.0
+libraries:
+  - name: parallelstore
+    apis:
+      - path: google/cloud/parallelstore/v1
+    gcloud:
+      command_operations_config:
+        - selector: google.cloud.parallelstore.v1.Parallelstore.ImportData
+          display_operation_result: true
+`
+	got, err := yaml.Unmarshal[Config]([]byte(yamlData))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(got.Libraries) != 1 {
+		t.Fatalf("expected 1 library, got %d", len(got.Libraries))
+	}
+	lib := got.Libraries[0]
+	if lib.Gcloud == nil {
+		t.Fatal("expected library.Gcloud to be set")
+	}
+	if len(lib.Gcloud.CommandOperationsConfig) != 1 {
+		t.Fatalf("expected 1 command operations config rule, got %d", len(lib.Gcloud.CommandOperationsConfig))
+	}
+	rule := lib.Gcloud.CommandOperationsConfig[0]
+	if rule.Selector != "google.cloud.parallelstore.v1.Parallelstore.ImportData" {
+		t.Errorf("unexpected selector: %s", rule.Selector)
+	}
+	if rule.DisplayOperationResult != true {
+		t.Errorf("expected DisplayOperationResult to be true, got %v", rule.DisplayOperationResult)
+	}
+}

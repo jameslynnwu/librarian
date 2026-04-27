@@ -771,6 +771,9 @@ type GcloudSurface struct {
 
 	// OutputFormatting contains all output formatting rules for commands.
 	OutputFormatting []*GcloudOutputFormatting `yaml:"output_formatting,omitempty"`
+
+	// CommandOperationsConfig contains long running operations config for methods.
+	CommandOperationsConfig []*GcloudCommandOperationsConfig `yaml:"command_operations_config,omitempty"`
 }
 
 // GcloudHelpTextRules contains rules for various types of help text within an API surface.
@@ -798,4 +801,10 @@ type GcloudHelpTextElement struct {
 type GcloudOutputFormatting struct {
 	Selector string `yaml:"selector"`
 	Format   string `yaml:"format"`
+}
+
+// GcloudCommandOperationsConfig contains LRO config rule for service methods.
+type GcloudCommandOperationsConfig struct {
+	Selector               string `yaml:"selector"`
+	DisplayOperationResult bool   `yaml:"display_operation_result"`
 }

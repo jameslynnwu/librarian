@@ -98,7 +98,10 @@ func generateAPI(api *config.API, gcloudCfg *config.GcloudSurface, googleapisDir
 		if len(gcloudCfg.OutputFormatting) > 0 {
 			api.OutputFormatting = mapOutputFormatting(gcloudCfg.OutputFormatting)
 		}
-		if gcloudCfg.HelpText != nil || len(gcloudCfg.OutputFormatting) > 0 {
+		if len(gcloudCfg.CommandOperationsConfig) > 0 {
+			api.CommandOperationsConfig = mapCommandOperationsConfig(gcloudCfg.CommandOperationsConfig)
+		}
+		if gcloudCfg.HelpText != nil || len(gcloudCfg.OutputFormatting) > 0 || len(gcloudCfg.CommandOperationsConfig) > 0 {
 			providerCfg.APIs = []provider.API{api}
 		}
 	}
@@ -190,6 +193,17 @@ func mapOutputFormatting(in []*config.GcloudOutputFormatting) []*provider.Output
 		out = append(out, &provider.OutputFormatting{
 			Selector: r.Selector,
 			Format:   r.Format,
+		})
+	}
+	return out
+}
+
+func mapCommandOperationsConfig(in []*config.GcloudCommandOperationsConfig) []*provider.CommandOperationsConfig {
+	var out []*provider.CommandOperationsConfig
+	for _, r := range in {
+		out = append(out, &provider.CommandOperationsConfig{
+			Selector:               r.Selector,
+			DisplayOperationResult: r.DisplayOperationResult,
 		})
 	}
 	return out
