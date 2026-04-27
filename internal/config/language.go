@@ -774,6 +774,9 @@ type GcloudSurface struct {
 
 	// CommandOperationsConfig contains long running operations config for methods.
 	CommandOperationsConfig []*GcloudCommandOperationsConfig `yaml:"command_operations_config,omitempty"`
+
+	// ResourcePatterns describes resource patterns not explicitly included in API descriptors.
+	ResourcePatterns []*GcloudResourcePattern `yaml:"resource_patterns,omitempty"`
 }
 
 // GcloudHelpTextRules contains rules for various types of help text within an API surface.
@@ -807,4 +810,11 @@ type GcloudOutputFormatting struct {
 type GcloudCommandOperationsConfig struct {
 	Selector               string `yaml:"selector"`
 	DisplayOperationResult bool   `yaml:"display_operation_result"`
+}
+
+// GcloudResourcePattern describes resource patterns not explicitly included in API descriptors.
+type GcloudResourcePattern struct {
+	Type       string   `yaml:"type"`
+	Patterns   []string `yaml:"patterns,omitempty"`
+	APIVersion string   `yaml:"api_version,omitempty"`
 }

@@ -585,3 +585,45 @@ libraries:
 		t.Errorf("expected DisplayOperationResult to be true, got %v", rule.DisplayOperationResult)
 	}
 }
+
+func TestGcloudConfig_ResourcePatterns(t *testing.T) {
+	yamlData := `
+language: gcloud
+version: 1.0.0
+libraries:
+  - name: parallelstore
+    apis:
+      - path: google/cloud/parallelstore/v1
+    gcloud:
+      resource_patterns:
+        - type: iam.googleapis.com/ServiceAccount
+          patterns:
+            - projects/{project}/serviceAccounts/{service_account}
+          api_version: v1
+`
+	got, err := yaml.Unmarshal[Config]([]byte(yamlData))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(got.Libraries) != 1 {
+		t.Fatalf("expected 1 library, got %d", len(got.Libraries))
+	}
+	lib := got.Libraries[0]
+	if lib.Gcloud == nil {
+		t.Fatal("expected library.Gcloud to be set")
+	}
+	if len(lib.Gcloud.ResourcePatterns) != 1 {
+		t.Fatalf("expected 1 resource pattern rule, got %d", len(lib.Gcloud.ResourcePatterns))
+	}
+	rule := lib.Gcloud.ResourcePatterns[0]
+	if rule.Type != "iam.googleapis.com/ServiceAccount" {
+		t.Errorf("unexpected type: %s", rule.Type)
+	}
+	if len(rule.Patterns) != 1 || rule.Patterns[0] != "projects/{project}/serviceAccounts/{service_account}" {
+		t.Errorf("unexpected patterns: %v", rule.Patterns)
+	}
+	if rule.APIVersion != "v1" {
+		t.Errorf("unexpected api_version: %s", rule.APIVersion)
+	}
+}

@@ -104,6 +104,9 @@ func generateAPI(api *config.API, gcloudCfg *config.GcloudSurface, googleapisDir
 		if gcloudCfg.HelpText != nil || len(gcloudCfg.OutputFormatting) > 0 || len(gcloudCfg.CommandOperationsConfig) > 0 {
 			providerCfg.APIs = []provider.API{api}
 		}
+		if len(gcloudCfg.ResourcePatterns) > 0 {
+			providerCfg.ResourcePatterns = mapResourcePatterns(gcloudCfg.ResourcePatterns)
+		}
 	}
 	return sidekickgcloud.Generate(model, providerCfg, outDir, baseModule)
 }
@@ -204,6 +207,18 @@ func mapCommandOperationsConfig(in []*config.GcloudCommandOperationsConfig) []*p
 		out = append(out, &provider.CommandOperationsConfig{
 			Selector:               r.Selector,
 			DisplayOperationResult: r.DisplayOperationResult,
+		})
+	}
+	return out
+}
+
+func mapResourcePatterns(in []*config.GcloudResourcePattern) []provider.ResourcePattern {
+	var out []provider.ResourcePattern
+	for _, r := range in {
+		out = append(out, provider.ResourcePattern{
+			Type:       r.Type,
+			Patterns:   r.Patterns,
+			APIVersion: r.APIVersion,
 		})
 	}
 	return out
