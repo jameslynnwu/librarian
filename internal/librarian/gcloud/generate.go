@@ -91,12 +91,15 @@ func generateAPI(api *config.API, gcloudCfg *config.GcloudSurface, googleapisDir
 	providerCfg := &provider.Config{}
 	if gcloudCfg != nil {
 		providerCfg.GenerateOperations = gcloudCfg.GenerateOperations
+		var api provider.API
 		if gcloudCfg.HelpText != nil {
-			providerCfg.APIs = []provider.API{
-				{
-					HelpText: mapHelpTextRules(gcloudCfg.HelpText),
-				},
-			}
+			api.HelpText = mapHelpTextRules(gcloudCfg.HelpText)
+		}
+		if len(gcloudCfg.OutputFormatting) > 0 {
+			api.OutputFormatting = mapOutputFormatting(gcloudCfg.OutputFormatting)
+		}
+		if gcloudCfg.HelpText != nil || len(gcloudCfg.OutputFormatting) > 0 {
+			providerCfg.APIs = []provider.API{api}
 		}
 	}
 	return sidekickgcloud.Generate(model, providerCfg, outDir, baseModule)
@@ -179,4 +182,15 @@ func mapHelpTextElement(in *config.GcloudHelpTextElement) *provider.HelpTextElem
 		Description: in.Description,
 		Examples:    in.Examples,
 	}
+}
+
+func mapOutputFormatting(in []*config.GcloudOutputFormatting) []*provider.OutputFormatting {
+	var out []*provider.OutputFormatting
+	for _, r := range in {
+		out = append(out, &provider.OutputFormatting{
+			Selector: r.Selector,
+			Format:   r.Format,
+		})
+	}
+	return out
 }

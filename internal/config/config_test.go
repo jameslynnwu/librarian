@@ -511,3 +511,40 @@ libraries:
 		t.Errorf("unexpected brief: %s", rule.HelpText.Brief)
 	}
 }
+
+func TestGcloudConfig_OutputFormatting(t *testing.T) {
+	yamlData := `
+language: gcloud
+version: 1.0.0
+libraries:
+  - name: parallelstore
+    apis:
+      - path: google/cloud/parallelstore/v1
+    gcloud:
+      output_formatting:
+        - selector: google.cloud.parallelstore.v1.Parallelstore.ListInstances
+          format: table(name, capacityGib:label=Capacity)
+`
+	got, err := yaml.Unmarshal[Config]([]byte(yamlData))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(got.Libraries) != 1 {
+		t.Fatalf("expected 1 library, got %d", len(got.Libraries))
+	}
+	lib := got.Libraries[0]
+	if lib.Gcloud == nil {
+		t.Fatal("expected library.Gcloud to be set")
+	}
+	if len(lib.Gcloud.OutputFormatting) != 1 {
+		t.Fatalf("expected 1 output formatting rule, got %d", len(lib.Gcloud.OutputFormatting))
+	}
+	rule := lib.Gcloud.OutputFormatting[0]
+	if rule.Selector != "google.cloud.parallelstore.v1.Parallelstore.ListInstances" {
+		t.Errorf("unexpected selector: %s", rule.Selector)
+	}
+	if rule.Format != "table(name, capacityGib:label=Capacity)" {
+		t.Errorf("unexpected format: %s", rule.Format)
+	}
+}

@@ -768,6 +768,9 @@ type GcloudSurface struct {
 
 	// HelpText contains rules for custom help text.
 	HelpText *GcloudHelpTextRules `yaml:"help_text,omitempty"`
+
+	// OutputFormatting contains all output formatting rules for commands.
+	OutputFormatting []*GcloudOutputFormatting `yaml:"output_formatting,omitempty"`
 }
 
 // GcloudHelpTextRules contains rules for various types of help text within an API surface.
@@ -789,4 +792,10 @@ type GcloudHelpTextElement struct {
 	Brief       string   `yaml:"brief,omitempty"`
 	Description string   `yaml:"description,omitempty"`
 	Examples    []string `yaml:"examples,omitempty"`
+}
+
+// GcloudOutputFormatting contains a collection of command output formatting rules.
+type GcloudOutputFormatting struct {
+	Selector string `yaml:"selector"`
+	Format   string `yaml:"format"`
 }
