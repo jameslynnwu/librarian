@@ -434,3 +434,34 @@ libraries:
 		t.Errorf("mismatch (-want +got):\n%s", diff)
 	}
 }
+
+func TestGcloudConfig_GenerateOperations(t *testing.T) {
+	yamlData := `
+language: gcloud
+version: 1.0.0
+libraries:
+  - name: parallelstore
+    apis:
+      - path: google/cloud/parallelstore/v1
+    gcloud:
+      generate_operations: false
+`
+	got, err := yaml.Unmarshal[Config]([]byte(yamlData))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(got.Libraries) != 1 {
+		t.Fatalf("expected 1 library, got %d", len(got.Libraries))
+	}
+	lib := got.Libraries[0]
+	if lib.Gcloud == nil {
+		t.Fatal("expected library.Gcloud to be set")
+	}
+	if lib.Gcloud.GenerateOperations == nil {
+		t.Fatal("expected library.Gcloud.GenerateOperations to be set")
+	}
+	if *lib.Gcloud.GenerateOperations != false {
+		t.Errorf("expected GenerateOperations to be false, got %v", *lib.Gcloud.GenerateOperations)
+	}
+}
