@@ -765,4 +765,28 @@ type NodejsAPI struct {
 type GcloudSurface struct {
 	// GenerateOperations indicates whether to generate top-level operations commands.
 	GenerateOperations *bool `yaml:"generate_operations,omitempty"`
+
+	// HelpText contains rules for custom help text.
+	HelpText *GcloudHelpTextRules `yaml:"help_text,omitempty"`
+}
+
+// GcloudHelpTextRules contains rules for various types of help text within an API surface.
+type GcloudHelpTextRules struct {
+	ServiceRules []*GcloudHelpTextRule `yaml:"service_rules,omitempty"`
+	MessageRules []*GcloudHelpTextRule `yaml:"message_rules,omitempty"`
+	MethodRules  []*GcloudHelpTextRule `yaml:"method_rules,omitempty"`
+	FieldRules   []*GcloudHelpTextRule `yaml:"field_rules,omitempty"`
+}
+
+// GcloudHelpTextRule maps an API selector to its corresponding HelpTextElement.
+type GcloudHelpTextRule struct {
+	Selector string                 `yaml:"selector,omitempty"`
+	HelpText *GcloudHelpTextElement `yaml:"help_text,omitempty"`
+}
+
+// GcloudHelpTextElement describes the content of the help text for a CLI Element.
+type GcloudHelpTextElement struct {
+	Brief       string   `yaml:"brief,omitempty"`
+	Description string   `yaml:"description,omitempty"`
+	Examples    []string `yaml:"examples,omitempty"`
 }

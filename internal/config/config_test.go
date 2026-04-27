@@ -465,3 +465,49 @@ libraries:
 		t.Errorf("expected GenerateOperations to be false, got %v", *lib.Gcloud.GenerateOperations)
 	}
 }
+
+func TestGcloudConfig_HelpText(t *testing.T) {
+	yamlData := `
+language: gcloud
+version: 1.0.0
+libraries:
+  - name: parallelstore
+    apis:
+      - path: google/cloud/parallelstore/v1
+    gcloud:
+      help_text:
+        method_rules:
+          - selector: google.cloud.parallelstore.v1.Parallelstore.ListInstances
+            help_text:
+              brief: Override Brief
+              description: Override Description
+              examples:
+                - Example 1
+                - Example 2
+`
+	got, err := yaml.Unmarshal[Config]([]byte(yamlData))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(got.Libraries) != 1 {
+		t.Fatalf("expected 1 library, got %d", len(got.Libraries))
+	}
+	lib := got.Libraries[0]
+	if lib.Gcloud == nil {
+		t.Fatal("expected library.Gcloud to be set")
+	}
+	if lib.Gcloud.HelpText == nil {
+		t.Fatal("expected library.Gcloud.HelpText to be set")
+	}
+	if len(lib.Gcloud.HelpText.MethodRules) != 1 {
+		t.Fatalf("expected 1 method rule, got %d", len(lib.Gcloud.HelpText.MethodRules))
+	}
+	rule := lib.Gcloud.HelpText.MethodRules[0]
+	if rule.Selector != "google.cloud.parallelstore.v1.Parallelstore.ListInstances" {
+		t.Errorf("unexpected selector: %s", rule.Selector)
+	}
+	if rule.HelpText.Brief != "Override Brief" {
+		t.Errorf("unexpected brief: %s", rule.HelpText.Brief)
+	}
+}

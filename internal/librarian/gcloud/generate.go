@@ -91,6 +91,13 @@ func generateAPI(api *config.API, gcloudCfg *config.GcloudSurface, googleapisDir
 	providerCfg := &provider.Config{}
 	if gcloudCfg != nil {
 		providerCfg.GenerateOperations = gcloudCfg.GenerateOperations
+		if gcloudCfg.HelpText != nil {
+			providerCfg.APIs = []provider.API{
+				{
+					HelpText: mapHelpTextRules(gcloudCfg.HelpText),
+				},
+			}
+		}
 	}
 	return sidekickgcloud.Generate(model, providerCfg, outDir, baseModule)
 }
@@ -131,4 +138,45 @@ func findServiceConfig(googleapisDir, apiPath string) (string, error) {
 		return "", fmt.Errorf("no service config found for api %q", apiPath)
 	}
 	return filepath.Join(googleapisDir, sc.ServiceConfig), nil
+}
+
+func mapHelpTextRules(in *config.GcloudHelpTextRules) *provider.HelpTextRules {
+	if in == nil {
+		return nil
+	}
+	out := &provider.HelpTextRules{}
+	for _, r := range in.ServiceRules {
+		out.ServiceRules = append(out.ServiceRules, mapHelpTextRule(r))
+	}
+	for _, r := range in.MessageRules {
+		out.MessageRules = append(out.MessageRules, mapHelpTextRule(r))
+	}
+	for _, r := range in.MethodRules {
+		out.MethodRules = append(out.MethodRules, mapHelpTextRule(r))
+	}
+	for _, r := range in.FieldRules {
+		out.FieldRules = append(out.FieldRules, mapHelpTextRule(r))
+	}
+	return out
+}
+
+func mapHelpTextRule(in *config.GcloudHelpTextRule) *provider.HelpTextRule {
+	if in == nil {
+		return nil
+	}
+	return &provider.HelpTextRule{
+		Selector: in.Selector,
+		HelpText: mapHelpTextElement(in.HelpText),
+	}
+}
+
+func mapHelpTextElement(in *config.GcloudHelpTextElement) *provider.HelpTextElement {
+	if in == nil {
+		return nil
+	}
+	return &provider.HelpTextElement{
+		Brief:       in.Brief,
+		Description: in.Description,
+		Examples:    in.Examples,
+	}
 }
