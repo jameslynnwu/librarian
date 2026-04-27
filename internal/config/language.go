@@ -777,6 +777,12 @@ type GcloudSurface struct {
 
 	// ResourcePatterns describes resource patterns not explicitly included in API descriptors.
 	ResourcePatterns []*GcloudResourcePattern `yaml:"resource_patterns,omitempty"`
+
+	// SupportsStarUpdateMasks indicates that this API supports '*' updateMasks.
+	SupportsStarUpdateMasks bool `yaml:"supports_star_update_masks,omitempty"`
+
+	// RootIsHidden applies the gcloud 'hidden' flag to the root command group.
+	RootIsHidden bool `yaml:"root_is_hidden,omitempty"`
 }
 
 // GcloudHelpTextRules contains rules for various types of help text within an API surface.

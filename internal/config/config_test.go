@@ -627,3 +627,35 @@ libraries:
 		t.Errorf("unexpected api_version: %s", rule.APIVersion)
 	}
 }
+
+func TestGcloudConfig_ApiLevelSettings(t *testing.T) {
+	yamlData := `
+language: gcloud
+version: 1.0.0
+libraries:
+  - name: parallelstore
+    apis:
+      - path: google/cloud/parallelstore/v1
+    gcloud:
+      supports_star_update_masks: true
+      root_is_hidden: true
+`
+	got, err := yaml.Unmarshal[Config]([]byte(yamlData))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(got.Libraries) != 1 {
+		t.Fatalf("expected 1 library, got %d", len(got.Libraries))
+	}
+	lib := got.Libraries[0]
+	if lib.Gcloud == nil {
+		t.Fatal("expected library.Gcloud to be set")
+	}
+	if lib.Gcloud.SupportsStarUpdateMasks != true {
+		t.Errorf("expected SupportsStarUpdateMasks to be true, got %v", lib.Gcloud.SupportsStarUpdateMasks)
+	}
+	if lib.Gcloud.RootIsHidden != true {
+		t.Errorf("expected RootIsHidden to be true, got %v", lib.Gcloud.RootIsHidden)
+	}
+}

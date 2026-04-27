@@ -91,7 +91,10 @@ func generateAPI(api *config.API, gcloudCfg *config.GcloudSurface, googleapisDir
 	providerCfg := &provider.Config{}
 	if gcloudCfg != nil {
 		providerCfg.GenerateOperations = gcloudCfg.GenerateOperations
-		var api provider.API
+		api := provider.API{
+			SupportsStarUpdateMasks: gcloudCfg.SupportsStarUpdateMasks,
+			RootIsHidden:            gcloudCfg.RootIsHidden,
+		}
 		if gcloudCfg.HelpText != nil {
 			api.HelpText = mapHelpTextRules(gcloudCfg.HelpText)
 		}
@@ -101,9 +104,8 @@ func generateAPI(api *config.API, gcloudCfg *config.GcloudSurface, googleapisDir
 		if len(gcloudCfg.CommandOperationsConfig) > 0 {
 			api.CommandOperationsConfig = mapCommandOperationsConfig(gcloudCfg.CommandOperationsConfig)
 		}
-		if gcloudCfg.HelpText != nil || len(gcloudCfg.OutputFormatting) > 0 || len(gcloudCfg.CommandOperationsConfig) > 0 {
-			providerCfg.APIs = []provider.API{api}
-		}
+		providerCfg.APIs = []provider.API{api}
+		
 		if len(gcloudCfg.ResourcePatterns) > 0 {
 			providerCfg.ResourcePatterns = mapResourcePatterns(gcloudCfg.ResourcePatterns)
 		}
